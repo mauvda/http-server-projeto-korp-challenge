@@ -2,7 +2,7 @@ FROM golang:1.22.2-alpine3.19 AS build
 WORKDIR /build
 
 # Copiando e baixando os modulos GO para o container
-COPY go.mod ./
+COPY go.mod go.sum ./
 RUN go mod download
 
 # Copiando a aplicação para o container e construindo o binário
