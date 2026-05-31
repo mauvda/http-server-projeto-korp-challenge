@@ -15,7 +15,7 @@ services:
       - docker_rede
   nginx:
     container_name: nginx-proxy
-    image: nginx:stable-alpine3.23-perl
+    image: nginx:${TAG_NGINX:-stable-alpine3.23-perl}
     ports:
       - 80:80
     networks:
@@ -28,3 +28,40 @@ services:
     # O Nginx depende do serviço http-server-projeto-korp para garantir que o servidor HTTP esteja em execução antes de iniciar o Nginx
     depends_on:
       - http-server-projeto-korp
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:${TAG_PROMETHEUS:-main}
+    ports:
+      - 9090:9090
+    networks:
+      - docker_rede
+
+    # Mapeamento do arquivo de configuração do Prometheus para o container
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    
+    # O Prometheus depende do serviço http-server-projeto-korp
+    # para garantir que o servidor HTTP esteja em execução antes de iniciar o Prometheus
+    depends_on:
+      - http-server-projeto-korp
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:${TAG_GRAFANA:-main}
+
+    # Definição da variável de ambiente para a senha do administrador do Grafana, utilizando o valor definido no arquivo .env
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+    
+    # Mapeamento dos arquivos de configuração do Grafana para o container
+    volumes:
+      - ./monitoring/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./monitoring/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    ports:
+      - 3000:3000
+    networks:
+      - docker_rede
+    
+    # O Grafana depende do serviço Prometheus para garantir que o Prometheus esteja em execução antes de iniciar o Grafana
+    depends_on:
+      - prometheus

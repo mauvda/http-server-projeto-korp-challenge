@@ -1,4 +1,4 @@
-FROM golang:1.22.2-alpine3.19 AS build
+FROM golang:1.23.12-alpine3.22 AS build
 WORKDIR /build
 
 # Copiando e baixando os modulos GO para o container
@@ -9,7 +9,7 @@ RUN go mod download
 COPY *.go ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o /build/http-server-projeto-korp
 
-FROM alpine:3.19
+FROM alpine:3.22
 WORKDIR /app
 
 # Criando um usuário não-root para rodar a aplicação com segurança

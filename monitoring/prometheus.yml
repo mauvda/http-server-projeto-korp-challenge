@@ -1,0 +1,10 @@
+global:
+
+  # Marcação de tempo para coleta de dados, definida para 5 segundos
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'http-server-projeto-korp'
+    static_configs:
+    # Coletando dados através do nome do serviço definido no docker-compose.yml
+      - targets: ['http-server-projeto-korp:8080']
