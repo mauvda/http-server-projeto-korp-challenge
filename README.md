@@ -32,7 +32,7 @@ Seguindo os critérios de aceitação do desafio, todo o ambiente — desde a in
 
 1. Clone o repositório para o diretório de sua preferência:
 ```bash
-   git clone [https://github.com/mauvda/http-server-projeto-korp-challenge.git](https://github.com/mauvda/http-server-projeto-korp-challenge.git)
+   git clone https://github.com/mauvda/http-server-projeto-korp-challenge
 ```   
 2. Navegue até o diretório:
 ```bash
