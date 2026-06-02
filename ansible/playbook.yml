@@ -7,13 +7,13 @@
     project_path: "{{ playbook_dir | dirname }}"
 
   tasks:
-    - name: 1. Baixar o script oficial de instalação universal da Docker
+    - name: Baixando o script oficial de instalação universal da Docker
       ansible.builtin.get_url:
         url: https://get.docker.com
         dest: /tmp/get-docker.sh
         mode: '0755'
         
-    - name: 2. Executar o script de instalação do Docker
+    - name: Executando o script de instalação do Docker
       ansible.builtin.command:
         cmd: /tmp/get-docker.sh
       register: docker_install_result
