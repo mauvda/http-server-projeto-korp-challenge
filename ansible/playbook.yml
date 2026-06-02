@@ -4,49 +4,20 @@
   become: true
 
   vars:
-    project_path: "/home/mauricio/http-server-projeto-korp-challenge"
+    project_path: "{{ playbook_dir | dirname }}"
 
   tasks:
-    - name: Instalando pre-requisitos do sistema
-      ansible.builtin.apt:
-        name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - gnupg
-          - lsb-release
-        state: present
-        update_cache: true
-
-    - name: Criando diretório de chaves isolado no ubuntu e definindo permissões
-      ansible.builtin.file:
-        path: /etc/apt/keyrings
-        state: directory
-        mode: '0755'
-
-    - name: Fazendo o download da chave GPG oficial do Docker e salvando no diretório de chaves
+    - name: 1. Baixar o script oficial de instalação universal da Docker
       ansible.builtin.get_url:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        dest: /etc/apt/keyrings/docker.asc
-        mode: '0644'
-
-    - name: Adicionando o repositório oficial do Docker para APT
-      ansible.builtin.apt_repository:
-        repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
-        state: present
-        filename: docker
-      # Utilizando '{{ ansible_distribution_release }}' para resolver dinamicamente a versão do docker (ex: noble, jammy).
-
-    - name: Instalando o Docker Engine e o Docker Compose Plugin via APT
-      ansible.builtin.apt:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-          - docker-buildx-plugin
-          - docker-compose-plugin
-        state: present
-        update_cache: true
+        url: https://get.docker.com
+        dest: /tmp/get-docker.sh
+        mode: '0755'
+        
+    - name: 2. Executar o script de instalação do Docker
+      ansible.builtin.command:
+        cmd: /tmp/get-docker.sh
+      register: docker_install_result
+      changed_when: true
 
     - name: Verificando status do serviço Docker e configurando para inicialização automatica
       ansible.builtin.service:
