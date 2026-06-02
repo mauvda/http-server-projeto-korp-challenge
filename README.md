@@ -25,7 +25,7 @@ Este repositório contém a solução do desafio técnico para a **Korp**. O pro
 Seguindo os critérios de aceitação do desafio, todo o ambiente — desde a instalação do Docker no sistema operacional até o deploy e validação dos containers — é executado com **um único comando**.
 
 ### Pré-requisitos
-* Um ambiente Linux baseado em Debian/Ubuntu (pode ser executado localmente via WSL).
+* Um ambiente Linux (pode ser executado localmente via WSL).
 * **Ansible** instalado na máquina de controle.
 
 ### Execução:
